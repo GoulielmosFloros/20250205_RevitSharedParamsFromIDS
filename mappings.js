@@ -12,7 +12,8 @@ export const ifcRevitExportMapping = {
 }
 
 export const ifcClassMapping = {
-  IFCWALL: "IfcWall"
+  IFCWALL: "IfcWall",
+  IFCSLAB: "IfcSlab"
 }
 
 // *Common Revit Data Types

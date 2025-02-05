@@ -120,7 +120,7 @@ const convertIdsParameters = () => {
   // Iterate through parameters to create lines for the shared parameters file.
   for (const param of parameters) {
     const values = Object.values(param); // Get the values from the parameter object.
-    sharedParamsLines.push(values.join("\\t")); // Join the values with a tab character and add the line to the sharedParamsLines array.
+    sharedParamsLines.push(values.join("\t")); // Join the values with a tab character and add the line to the sharedParamsLines array.
   }
 
   // Define the text content for the shared parameters file.
@@ -131,7 +131,7 @@ META	2	1
 *GROUP	ID	NAME
 GROUP	1	IFC Parameters
 *PARAM	GUID	NAME	DATATYPE	DATACATEGORY	GROUP	VISIBLE	DESCRIPTION	USERMODIFIABLE	HIDEWHENNOVALUE
-${sharedParamsLines.join("\\n")}`;
+${sharedParamsLines.join("\n")}`;
 
   // Check if the shared parameters file already exists and delete it if it does.
   const sharedParamsFileExists = fs.existsSync("./SharedParameters.txt");
@@ -146,22 +146,22 @@ ${sharedParamsLines.join("\\n")}`;
   // Iterate through sets to create lines for the property set file.
   for (const set of sets) {
     const { name, elements, props } = set; // Extract the name, elements, and properties from the set object.
-    const psetLine = `PropertySet:\\t${name}\\tI\\t${elements.join(",")}`; // Create the property set line with the name and elements.
+    const psetLine = `PropertySet:\t${name}\tI\t${elements.join(",")}`; // Create the property set line with the name and elements.
     const propLines = []; // Initialize an array to store the lines of text for the properties in the current set.
 
     // Iterate through the properties in the current set to create the lines of text for the properties.
     for (const prop of props) {
       const { revitName, type, nameInIfc } = prop; // Extract the Revit name, type, and IFC name from the property object.
-      let propLine = `\\t${nameInIfc}\\t${type}`; // Create the property line with the IFC name and type.
-      if (revitName) propLine += `\\t${revitName}`; // If a Revit name is specified, add it to the property line.
+      let propLine = `\t${nameInIfc}\t${type}`; // Create the property line with the IFC name and type.
+      if (revitName) propLine += `\t${revitName}`; // If a Revit name is specified, add it to the property line.
       propLines.push(propLine); // Add the property line to the propLines array.
     }
-    const line = `${psetLine}\\n${propLines.join("\\n")}`; // Combine the property set line and the property lines.
+    const line = `${psetLine}\n${propLines.join("\n")}`; // Combine the property set line and the property lines.
     psetLines.push(line); // Add the line to the psetLines array.
   }
 
   // Join the property set lines with a newline character.
-  const userDefinedPsetsText = psetLines.join("\\n");
+  const userDefinedPsetsText = psetLines.join("\n");
 
   // Check if the property sets file already exists and delete it if it does.
   const psetsFileExists = fs.existsSync("./UserDefinedPsets.txt");
