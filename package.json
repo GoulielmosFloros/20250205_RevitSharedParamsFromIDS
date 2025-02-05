@@ -1,0 +1,7 @@
+{
+  "type": "module",
+  "dependencies": {
+    "@thatopen/components": "2.4.4",
+    "crypto": "^1.0.1"
+  }
+}
