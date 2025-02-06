@@ -8,7 +8,7 @@
       <applicability maxOccurs="unbounded">
         <entity>
           <name>
-            <simpleValue>IFCSLAB</simpleValue>
+            <simpleValue>IFCCOLUMN</simpleValue>
           </name>
         </entity>
       </applicability>
@@ -21,6 +21,14 @@
             <simpleValue>Completed</simpleValue>
           </baseName>
         </property>
+        <property dataType="IFCBOOLEAN">
+          <propertySet>
+            <simpleValue>ConstructionData</simpleValue>
+          </propertySet>
+          <baseName>
+            <simpleValue>Rating</simpleValue>
+          </baseName>
+        </property>
         <property dataType="IFCLABEL">
           <propertySet>
             <simpleValue>ConstructionData</simpleValue>
@@ -28,6 +36,11 @@
           <baseName>
             <simpleValue>CompletionDate</simpleValue>
           </baseName>
+        </property>
+        <property dataType="IFCLABEL">
+          <propertySet>
+            <simpleValue>ConstructionData</simpleValue>
+          </propertySet>
           <baseName>
             <simpleValue>FireRating</simpleValue>
           </baseName>

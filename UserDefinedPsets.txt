@@ -1,0 +1,9 @@
+PropertySet:	ConstructionData	I	IfcWall
+	Completed	Boolean	Completed
+	CompletionDate	Text	CompletionDate
+
+PropertySet:	ConstructionData	I	IfcColumn
+	Completed	Boolean	Completed
+	Rating	Boolean	Rating
+	CompletionDate	Text	CompletionDate
+	FireRating	Text	FireRating

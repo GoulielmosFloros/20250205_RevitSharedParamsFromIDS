@@ -1,7 +1,41 @@
 import * as fs from "fs"; // Import the file system module
+import * as path from "path"
 import * as OBC from "@thatopen/components"; // Import the That Open Company components package
 import * as crypto from "crypto";
 import { ifcRevitTypeMapping, ifcClassMapping, ifcRevitExportMapping } from "./mappings.js"; // Import mapping objects
+
+
+function readFile(joinedPath) {
+  return fs.readFileSync(joinedPath)
+}
+
+function getFiles() {
+	// Get the last argument from the vector (the path to the files)
+  const input = process.argv[2]
+
+	// Indicate usage
+  if (!input) {
+    throw new Error('No Path Provided')
+    process.exit(1)
+  }
+
+  let files
+  try {
+	  // Read directory and filter needed files
+    files = fs.readdirSync(
+      input
+    ).filter(file => path.extname(file).toLowerCase() === '.ids')
+  } catch {
+      throw new Error('Insert a valid directory.')
+  }
+
+  if (files.length === 0) {
+      throw new Error(`No BCF files found in ${input}`)
+  }
+
+	// Return the full path of the file
+  return files.map(file => path.join(input, file))
+}
 
 const components = new OBC.Components(); // Create a new instance of the Components class
 const ids = components.get(OBC.IDSSpecifications); // Get an instance of the IDSSpecifications component
@@ -94,10 +128,12 @@ const convertIdsParameters = () => {
       // Extract the property set name and property name.
       const { parameter: psetName } = propertySet;
       const { parameter: propName } = baseName;
-
+      
       // Find an existing property set with the same name.
-      let set = sets.find(({ name }) => name === psetName);
-
+      let set = sets.find(({ name, elements: setElements }) => 
+        name === psetName && elements.some(el => setElements.includes(el))
+      );
+      
       // If the set doesn't exist, create one.
       if (!set) {
         set = { name: psetName, elements, props: [] }; //Create a set containing its name, the element which it applies to and an empty list to store properties
@@ -142,7 +178,6 @@ ${sharedParamsLines.join("\n")}`;
 
   // Initialize an array to store lines for the property set file.
   const psetLines = [];
-
   // Iterate through sets to create lines for the property set file.
   for (const set of sets) {
     const { name, elements, props } = set; // Extract the name, elements, and properties from the set object.
@@ -156,7 +191,7 @@ ${sharedParamsLines.join("\n")}`;
       if (revitName) propLine += `\t${revitName}`; // If a Revit name is specified, add it to the property line.
       propLines.push(propLine); // Add the property line to the propLines array.
     }
-    const line = `${psetLine}\n${propLines.join("\n")}`; // Combine the property set line and the property lines.
+    const line = `${psetLine}\n${propLines.join("\n")}\n`; // Combine the property set line and the property lines.
     psetLines.push(line); // Add the line to the psetLines array.
   }
 
@@ -172,11 +207,21 @@ ${sharedParamsLines.join("\n")}`;
 
 }
 
-// Read the contents of the IDS file.
-const requirements = fs.readFileSync("./requirements.ids", "utf8");
+// // Read the contents of the IDS file.
+// const requirements = fs.readFileSync("./requirements.ids", "utf8");
 
-// Load the IDS content into the IDS component.
-ids.load(requirements);
+// // Load the IDS content into the IDS component.
+// ids.load(requirements);
+
+function chat() {
+  const filesPath = getFiles()
+
+  for (const file of filesPath) {
+    const fileData = readFile(file)
+    ids.load(fileData);
+  }
+}
+chat()
 
 // Call the function to convert the IDS parameters.
 convertIdsParameters()
